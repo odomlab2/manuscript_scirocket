@@ -1,0 +1,133 @@
+---
+title: "Benchmarking of sci-rocket"
+author: "J. van Riet"
+format: html
+editor: visual
+---
+
+## Introduction
+
+This workflow will visualize the benchmarking of two sci-seq-RNAv3 data-set consisting of a large cohort of Four Core Genotypes (FCG) mice (FCG; 11.3 billion mate-pairs) and a smaller *Danio Rerio* cohort (490 million mate-pairs) in which additional nuclear oligo hashing barcodes were added.
+
+```{r _init}
+#| message: false
+#| warning: false
+library(dplyr)
+library(patchwork)
+source('misc_functions.R')
+
+# Parallel options.
+future::plan(strategy = future::multisession(workers = 10))
+
+# Set seed.
+base::set.seed(708813)
+
+# Location of benchmarking logs.
+files_benchmark <- list.files('~/Downloads/benchmarks/', full.names = T)
+```
+
+## Import of benchmarking logs
+
+The runtime, IO and memory usage of experiments are logged using the Snakemake benchmarking suite. We now import the benchmarking logs of the two cohorts.
+
+```{r import_benchmarks}
+data_benchmark <- dplyr::bind_rows(future.apply::future_lapply(files_benchmark, function(x){
+    data <- readr::read_tsv(x, show_col_types = FALSE) %>%
+        dplyr::mutate(
+            step = gsub('_test_.*', '', basename(x)),
+            step = gsub('_zebra.*|_mouse.*', '', step),
+            step = gsub('_sx42b.*', '', step),
+            experiment = dplyr::if_else(grepl('sx42b', x), 'FCG', 'Zebrafish (Hashing)')
+        )
+    return(data)
+}))
+
+# Calc. mean + SE
+data_benchmark <- data_benchmark %>%
+    dplyr::group_by(step, experiment) %>%
+    dplyr::summarise(
+        mean_m = mean(s / 60),
+        sd_m = sd(s / 60),
+        mean_io_in = mean(io_in / 1024),
+        sd_io_in = sd(io_in / 1024),
+        mean_io_out = mean(io_out / 1024),
+        sd_io_out = sd(io_out / 1024),
+        mean_max_rss = mean(max_rss / 1024),
+        sd_max_rss = sd(max_rss / 1024),
+        mean_mean_load = mean(mean_load / 100),
+        sd_mean_load = sd(mean_load / 100), .groups = 'keep'
+    ) %>% 
+    dplyr::mutate(
+        step = factor(step, levels = c('bcl2fastq', 'split_R1', 'split_R2', 'demultiplex_fastq_split', 'gather_demultiplexed_sequencing', 'gather_demultiplexed_samples', 'trim_fastp', 'generate_index_STAR', 'starSolo_align', 'sambamba_index', 'sci_dash')),
+        step = dplyr::recode_factor(
+            step,
+            bcl2fastq = 'Converting BCL (**bcl2fastq**)',
+            split_R1 = "Splitting R1 into chunks",
+            split_R2 = "Splitting R2 into chunks",
+            demultiplex_fastq_split = "Barcode demultiplexing (on chunks)",
+            gather_demultiplexed_sequencing = "Merging experiment-based files",
+            gather_demultiplexed_samples = "Merging sample-based files",
+            trim_fastp = "Trimming (**fastp**)",
+            generate_index_STAR = "Generating alignment index (**STAR**)",
+            starSolo_align = "Alignment and UMI counting (**STARSolo**)",
+            sambamba_index = "Generating BAM indexes (**sambamba**)",
+            sci_dash = "Generating interactive dashboard"
+        )
+    ) %>% 
+    dplyr::ungroup()
+```
+
+```{r figure_FCG}
+#| label: fig-benchmark-FCG
+#| fig-cap: "Benchmarking of the FCG cohort"
+#| cap-location: margin
+#| fig-width: 4
+#| fig-height: 7
+#| fig-align: center
+#| fig-dpi: 720
+generate_benchmarking_plot(data_benchmark %>% dplyr::filter(experiment == 'FCG'))
+```
+
+```{r figure_Zebrafish}
+#| label: fig-benchmark-zebrafish
+#| fig-cap: "Benchmarking of the Zebrafish cohort"
+#| cap-location: margin
+#| fig-width: 4
+#| fig-height: 7
+#| fig-align: center
+#| fig-dpi: 720
+generate_benchmarking_plot(data_benchmark %>% dplyr::filter(experiment != 'FCG'), ylimits_runtime = c(0, 45), nudge_runtime = 2.5, nudge_io = 2.5, ylimits_maxio_read = c(0,100), ylimits_maxio_write = c(0, 100))
+```
+
+## Determine speed of demultiplexing
+
+Using a single split chunk, we can determine the speed of de-multiplexing by checking the de-multiplexing time per 1M reads.
+
+```{r plot_bigO}
+#| message: false
+#| warning: false
+#| label: fig-benchmark-bigO
+#| fig-cap: "De-multiplexing speed per 1M reads."
+#| cap-location: margin
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| fig-dpi: 720
+x <- readr::read_tsv('~/Downloads/demultiplex_fastq_split_sx42b_1-of-25.log', col_names = 'line', show_col_types = FALSE) %>%
+    dplyr::filter(grepl("INFO: Done:", line)) %>%
+    dplyr::mutate(
+        n_reads = as.integer(gsub(' read-pairs.*', '', gsub('.*INFO: Done: ', '', line))),
+        time = lubridate::as_datetime(gsub(' -.*', '', line))
+    )
+
+x$time <- x$time - min(x$time)
+
+ggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +
+    ggplot2::geom_point(size = 1, shape = 21) +
+    ggplot2::scale_x_continuous(labels = scales::unit_format(suffix = ' million', scale = 0.000001)) +
+    ggplot2::scale_y_continuous() +
+    ggplot2::labs(x = 'No. read-pairs', y = 'Time (in seconds)') +
+    ggpmisc::stat_poly_eq(ggpmisc::use_label(c("eq", "R2")), formula = x~y, method = 'lm') +
+    theme_job
+
+```

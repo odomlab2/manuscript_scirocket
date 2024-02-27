@@ -1,0 +1,46 @@
+project:
+    type: website
+    output-dir: docs
+
+website:
+    page-navigation: true
+    title: "Benchmarking - sci-rocket."
+    site-url: "https://odomlab2.github.io/manuscipt_scirocket"
+    repo-url: https://github.com/odomlab2/manuscript_scirocket
+    repo-actions: [edit, issue]
+
+    page-footer:
+        right: "This page is built with [Quarto](https://quarto.org/)."
+        left: "&copy; CC-By DKFZ, 2024"
+
+    sidebar:
+        pinned: true
+        align: center
+        tools:
+            - icon: github
+              href: https://github.com/odomlab2/manuscript_scirocket
+              text: "Benchmarking - sci-rocket"
+
+        style: "docked"
+        search: true
+        collapse-level: 1
+        contents:
+          - section: "Benchmarking"
+            contents:
+              - workflows/1.benchmarking.qmd
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    code-copy: true
+    code-overflow: wrap
+    code-fold: true
+    code-summary: "Show code"
+    code-tools:
+      source: repo
+    code-block-border-left: true
+    highlight-style: github
+    toc: true
+    df-print: paged
