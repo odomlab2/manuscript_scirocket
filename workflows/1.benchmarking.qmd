@@ -7,7 +7,7 @@ editor: visual
 
 ## Introduction
 
-This workflow will visualize the benchmarking of two sci-seq-RNAv3 data-set consisting of a large cohort of Four Core Genotypes (FCG) mice (FCG; 11.3 billion mate-pairs) and a smaller *Danio Rerio* cohort (490 million mate-pairs) in which additional nuclear oligo hashing barcodes were added.
+This workflow will visualize the benchmarking of two sci-RNA-seqv3 data-set consisting of a large cohort of Four Core Genotypes (FCG) mice (FCG; 11.3 billion mate-pairs) and a smaller *Danio Rerio* cohort (490 million mate-pairs) in which additional nuclear oligo hashing barcodes were added.
 
 ```{r _init}
 #| message: false
@@ -129,5 +129,10 @@ ggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +
     ggplot2::labs(x = 'No. read-pairs', y = 'Time (in seconds)') +
     ggpmisc::stat_poly_eq(ggpmisc::use_label(c("eq", "R2")), formula = x~y, method = 'lm') +
     theme_job
+```
 
+### Session information
+
+```{r session_info}
+sessioninfo::session_info()
 ```
