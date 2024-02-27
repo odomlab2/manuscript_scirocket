@@ -26,6 +26,24 @@ base::set.seed(708813)
 files_benchmark <- list.files('~/Downloads/benchmarks/', full.names = T)
 ```
 
+### Overview of cohorts
+
+```{r import_cohorts}
+#| warning: false
+#| message: false
+#| label: table-cohorts
+#| fig-cap: "Overview of cohorts"
+cohorts <- readr::read_tsv('../config/testing_samplesheet.tsv', show_col_types = FALSE)
+
+cohorts %>% 
+    dplyr::group_by(experiment_name) %>% 
+    dplyr::summarise(n = dplyr::n_distinct(sample_name), .groups = 'keep') %>% 
+    dplyr::ungroup() %>% 
+    dplyr::select(`Cohort` = experiment_name, `Total samples` = n) %>% 
+    knitr::kable() %>% 
+    kableExtra::kable_styling(bootstrap_options = "striped", full_width = FALSE)
+```
+
 ## Import of benchmarking logs
 
 The runtime, IO and memory usage of experiments are logged using the Snakemake benchmarking suite. We now import the benchmarking logs of the two cohorts.
@@ -129,6 +147,15 @@ ggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +
     ggplot2::labs(x = 'No. read-pairs', y = 'Time (in seconds)') +
     ggpmisc::stat_poly_eq(ggpmisc::use_label(c("eq", "R2")), formula = x~y, method = 'lm') +
     theme_job
+```
+
+## Write suppl. table
+
+```{r write_table}
+#| message: false
+#| warning: false
+data_xl <- list('Demultiplexing' = cohorts, 'Benchmarking' = data_benchmark)
+openxlsx::write.xlsx(data_xl, '~/Downloads/SupplTable1.xlsx', asTable = TRUE)
 ```
 
 ### Session information

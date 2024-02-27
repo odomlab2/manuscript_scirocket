@@ -1,5 +1,4 @@
 path_bcl	experiment_name	p5	p7	rt	sample_name	species	n_expected_cells	strain1	strain2	hashing
-/omics/groups/OE0538/internal/projects/sexomics/data/rawData/bcl/231121_VH00693_145_AACVGJJM5	test_haplotyping	A05:H05	F01:F03	P01-A01,P01-A02,P01-A03,P01-B01,P01-B02,P01-B03,P01-C01,P01-C02,P01-C03,P01-D01,P01-D02,P01-D03,P01-E01,P01-E02,P01-E03,P01-F01,P01-F02,P01-F03,P01-G01,P01-G02,P01-G03,P01-H01,P01-H02,P01-H03	liver	mouse	4800	B6	CAST_EiJ
 /omics/groups/OE0538/internal/projects/sexomics/data/rawData/bcl/230623_A01382_0398_AH3KTGDSX7	sx42b	A09:H09,A10:H10	E01:E02,F01:F12,G01:G12	P01-A01	sx42_1	mouse	10000
 /omics/groups/OE0538/internal/projects/sexomics/data/rawData/bcl/230623_A01382_0398_AH3KTGDSX7	sx42b	A09:H09,A10:H10	E01:E02,F01:F12,G01:G12	P01-B01	sx42_1	mouse	10000
 /omics/groups/OE0538/internal/projects/sexomics/data/rawData/bcl/230623_A01382_0398_AH3KTGDSX7	sx42b	A09:H09,A10:H10	E01:E02,F01:F12,G01:G12	P01-C01	sx42_1	mouse	10000
