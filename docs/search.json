@@ -1,0 +1,46 @@
+[
+  {
+    "objectID": "workflows/1.benchmarking.html",
+    "href": "workflows/1.benchmarking.html",
+    "title": "Benchmarking of sci-rocket",
+    "section": "",
+    "text": "This workflow will visualize the benchmarking of two sci-seq-RNAv3 data-set consisting of a large cohort of Four Core Genotypes (FCG) mice (FCG; 11.3 billion mate-pairs) and a smaller Danio Rerio cohort (490 million mate-pairs) in which additional nuclear oligo hashing barcodes were added.\n\n\nShow code\nlibrary(dplyr)\nlibrary(patchwork)\nsource('misc_functions.R')\n\n# Parallel options.\nfuture::plan(strategy = future::multisession(workers = 10))\n\n# Set seed.\nbase::set.seed(708813)\n\n# Location of benchmarking logs.\nfiles_benchmark &lt;- list.files('~/Downloads/benchmarks/', full.names = T)",
+    "crumbs": [
+      "Benchmarking",
+      "Benchmarking of sci-rocket"
+    ]
+  },
+  {
+    "objectID": "workflows/1.benchmarking.html#introduction",
+    "href": "workflows/1.benchmarking.html#introduction",
+    "title": "Benchmarking of sci-rocket",
+    "section": "",
+    "text": "This workflow will visualize the benchmarking of two sci-seq-RNAv3 data-set consisting of a large cohort of Four Core Genotypes (FCG) mice (FCG; 11.3 billion mate-pairs) and a smaller Danio Rerio cohort (490 million mate-pairs) in which additional nuclear oligo hashing barcodes were added.\n\n\nShow code\nlibrary(dplyr)\nlibrary(patchwork)\nsource('misc_functions.R')\n\n# Parallel options.\nfuture::plan(strategy = future::multisession(workers = 10))\n\n# Set seed.\nbase::set.seed(708813)\n\n# Location of benchmarking logs.\nfiles_benchmark &lt;- list.files('~/Downloads/benchmarks/', full.names = T)",
+    "crumbs": [
+      "Benchmarking",
+      "Benchmarking of sci-rocket"
+    ]
+  },
+  {
+    "objectID": "workflows/1.benchmarking.html#import-of-benchmarking-logs",
+    "href": "workflows/1.benchmarking.html#import-of-benchmarking-logs",
+    "title": "Benchmarking of sci-rocket",
+    "section": "Import of benchmarking logs",
+    "text": "Import of benchmarking logs\nThe runtime, IO and memory usage of experiments are logged using the Snakemake benchmarking suite. We now import the benchmarking logs of the two cohorts.\n\n\nShow code\ndata_benchmark &lt;- dplyr::bind_rows(future.apply::future_lapply(files_benchmark, function(x){\n    data &lt;- readr::read_tsv(x, show_col_types = FALSE) %&gt;%\n        dplyr::mutate(\n            step = gsub('_test_.*', '', basename(x)),\n            step = gsub('_zebra.*|_mouse.*', '', step),\n            step = gsub('_sx42b.*', '', step),\n            experiment = dplyr::if_else(grepl('sx42b', x), 'FCG', 'Zebrafish (Hashing)')\n        )\n    return(data)\n}))\n\n# Calc. mean + SE\ndata_benchmark &lt;- data_benchmark %&gt;%\n    dplyr::group_by(step, experiment) %&gt;%\n    dplyr::summarise(\n        mean_m = mean(s / 60),\n        sd_m = sd(s / 60),\n        mean_io_in = mean(io_in / 1024),\n        sd_io_in = sd(io_in / 1024),\n        mean_io_out = mean(io_out / 1024),\n        sd_io_out = sd(io_out / 1024),\n        mean_max_rss = mean(max_rss / 1024),\n        sd_max_rss = sd(max_rss / 1024),\n        mean_mean_load = mean(mean_load / 100),\n        sd_mean_load = sd(mean_load / 100), .groups = 'keep'\n    ) %&gt;% \n    dplyr::mutate(\n        step = factor(step, levels = c('bcl2fastq', 'split_R1', 'split_R2', 'demultiplex_fastq_split', 'gather_demultiplexed_sequencing', 'gather_demultiplexed_samples', 'trim_fastp', 'generate_index_STAR', 'starSolo_align', 'sambamba_index', 'sci_dash')),\n        step = dplyr::recode_factor(\n            step,\n            bcl2fastq = 'Converting BCL (**bcl2fastq**)',\n            split_R1 = \"Splitting R1 into chunks\",\n            split_R2 = \"Splitting R2 into chunks\",\n            demultiplex_fastq_split = \"Barcode demultiplexing (on chunks)\",\n            gather_demultiplexed_sequencing = \"Merging experiment-based files\",\n            gather_demultiplexed_samples = \"Merging sample-based files\",\n            trim_fastp = \"Trimming (**fastp**)\",\n            generate_index_STAR = \"Generating alignment index (**STAR**)\",\n            starSolo_align = \"Alignment and UMI counting (**STARSolo**)\",\n            sambamba_index = \"Generating BAM indexes (**sambamba**)\",\n            sci_dash = \"Generating interactive dashboard\"\n        )\n    ) %&gt;% \n    dplyr::ungroup()\n\n\n\n\nShow code\ngenerate_benchmarking_plot(data_benchmark %&gt;% dplyr::filter(experiment == 'FCG'))\n\n\n\n\n\n\n\n\nFigure 1: Benchmarking of the FCG cohort\n\n\n\n\n\n\n\nShow code\ngenerate_benchmarking_plot(data_benchmark %&gt;% dplyr::filter(experiment != 'FCG'), ylimits_runtime = c(0, 45), nudge_runtime = 2.5, nudge_io = 2.5, ylimits_maxio_read = c(0,100), ylimits_maxio_write = c(0, 100))\n\n\n\n\n\n\n\n\nFigure 2: Benchmarking of the Zebrafish cohort",
+    "crumbs": [
+      "Benchmarking",
+      "Benchmarking of sci-rocket"
+    ]
+  },
+  {
+    "objectID": "workflows/1.benchmarking.html#determine-speed-of-demultiplexing",
+    "href": "workflows/1.benchmarking.html#determine-speed-of-demultiplexing",
+    "title": "Benchmarking of sci-rocket",
+    "section": "Determine speed of demultiplexing",
+    "text": "Determine speed of demultiplexing\nUsing a single split chunk, we can determine the speed of de-multiplexing by checking the de-multiplexing time per 1M reads.\n\n\nShow code\nx &lt;- readr::read_tsv('~/Downloads/demultiplex_fastq_split_sx42b_1-of-25.log', col_names = 'line', show_col_types = FALSE) %&gt;%\n    dplyr::filter(grepl(\"INFO: Done:\", line)) %&gt;%\n    dplyr::mutate(\n        n_reads = as.integer(gsub(' read-pairs.*', '', gsub('.*INFO: Done: ', '', line))),\n        time = lubridate::as_datetime(gsub(' -.*', '', line))\n    )\n\nx$time &lt;- x$time - min(x$time)\n\nggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +\n    ggplot2::geom_point(size = 1, shape = 21) +\n    ggplot2::scale_x_continuous(labels = scales::unit_format(suffix = ' million', scale = 0.000001)) +\n    ggplot2::scale_y_continuous() +\n    ggplot2::labs(x = 'No. read-pairs', y = 'Time (in seconds)') +\n    ggpmisc::stat_poly_eq(ggpmisc::use_label(c(\"eq\", \"R2\")), formula = x~y, method = 'lm') +\n    theme_job\n\n\n\n\n\n\n\n\nFigure 3: De-multiplexing speed per 1M reads.",
+    "crumbs": [
+      "Benchmarking",
+      "Benchmarking of sci-rocket"
+    ]
+  }
+]
