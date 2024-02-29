@@ -23,7 +23,7 @@ future::plan(strategy = future::multisession(workers = 10))
 base::set.seed(708813)
 
 # Location of benchmarking logs.
-files_benchmark <- list.files('~/Downloads/benchmarks/', full.names = T)
+files_benchmark <- list.files('~/DKFZ/odomLab/manuscript_scirocket/benchmarks/', full.names = T)
 ```
 
 ### Overview of cohorts
@@ -55,7 +55,7 @@ data_benchmark <- dplyr::bind_rows(future.apply::future_lapply(files_benchmark, 
             step = gsub('_test_.*', '', basename(x)),
             step = gsub('_zebra.*|_mouse.*', '', step),
             step = gsub('_sx42b.*', '', step),
-            experiment = dplyr::if_else(grepl('sx42b', x), 'FCG', 'Zebrafish (Hashing)')
+            experiment = dplyr::if_else(grepl('sx42b|mouse', x), 'FCG', 'Zebrafish (Hashing)')
         )
     return(data)
 }))
@@ -131,7 +131,7 @@ Using a single split chunk, we can determine the speed of de-multiplexing by che
 #| fig-height: 4
 #| fig-align: center
 #| fig-dpi: 720
-x <- readr::read_tsv('~/Downloads/demultiplex_fastq_split_sx42b_1-of-25.log', col_names = 'line', show_col_types = FALSE) %>%
+x <- readr::read_tsv('~/DKFZ/odomLab/manuscript_scirocket/logs/step2_demultiplexing_reads/demultiplex_fastq_split_sx42b_1-of-25.log', col_names = 'line', show_col_types = FALSE) %>%
     dplyr::filter(grepl("INFO: Done:", line)) %>%
     dplyr::mutate(
         n_reads = as.integer(gsub(' read-pairs.*', '', gsub('.*INFO: Done: ', '', line))),
@@ -155,7 +155,7 @@ ggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +
 #| message: false
 #| warning: false
 data_xl <- list('Demultiplexing' = cohorts, 'Benchmarking' = data_benchmark)
-openxlsx::write.xlsx(data_xl, '~/Downloads/SupplTable1.xlsx', asTable = TRUE)
+openxlsx::write.xlsx(data_xl, '~/DKFZ/odomLab/manuscript_scirocket/tables/SupplTable1.xlsx', asTable = TRUE)
 ```
 
 ### Session information
