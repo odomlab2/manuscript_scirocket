@@ -142,10 +142,10 @@ x$time <- x$time - min(x$time)
 
 ggplot2::ggplot(x, ggplot2::aes(x = n_reads, y = time)) +
     ggplot2::geom_point(size = 1, shape = 21) +
-    ggplot2::scale_x_continuous(labels = scales::unit_format(suffix = ' million', scale = 0.000001)) +
-    ggplot2::scale_y_continuous() +
+    ggplot2::scale_x_continuous(labels = scales::unit_format(suffix = ' million', scale = 0.000001), expand = c(0,0.01)) +
+    ggplot2::scale_y_continuous(limits = c(0, 12000), expand = c(0,0.01)) +
     ggplot2::labs(x = 'No. read-pairs', y = 'Time (in seconds)') +
-    ggpmisc::stat_poly_eq(ggpmisc::use_label(c("eq", "R2")), formula = x~y, method = 'lm') +
+    ggpubr::stat_cor(label.y = 11000, p.digits = 0, method = 'pearson', alternative = 'two.sided') +
     theme_job
 ```
 

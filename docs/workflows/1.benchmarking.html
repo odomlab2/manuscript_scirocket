@@ -345,7 +345,7 @@ test_hashing
 <div class="sourceCode cell-code" id="cb4" data-cap-location="margin"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">generate_benchmarking_plot</span>(data_benchmark <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(experiment <span class="sc">==</span> <span class="st">'FCG'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-benchmark-FCG" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
+<div id="fig-benchmark-FCG" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-benchmark-FCG-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="1.benchmarking_files/figure-html/fig-benchmark-FCG-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="2880">
@@ -363,7 +363,7 @@ Figure&nbsp;1: Benchmarking of the FCG cohort
 <div class="sourceCode cell-code" id="cb5" data-cap-location="margin"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">generate_benchmarking_plot</span>(data_benchmark <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(experiment <span class="sc">!=</span> <span class="st">'FCG'</span>), <span class="at">ylimits_runtime =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">45</span>), <span class="at">nudge_runtime =</span> <span class="fl">2.5</span>, <span class="at">nudge_io =</span> <span class="fl">2.5</span>, <span class="at">ylimits_maxio_read =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylimits_maxio_write =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-benchmark-zebrafish" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
+<div id="fig-benchmark-zebrafish" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-benchmark-zebrafish-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="1.benchmarking_files/figure-html/fig-benchmark-zebrafish-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="2880">
@@ -393,14 +393,14 @@ Figure&nbsp;2: Benchmarking of the Zebrafish cohort
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(x, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> n_reads, <span class="at">y =</span> time)) <span class="sc">+</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">shape =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">unit_format</span>(<span class="at">suffix =</span> <span class="st">' million'</span>, <span class="at">scale =</span> <span class="fl">0.000001</span>)) <span class="sc">+</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_y_continuous</span>() <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">unit_format</span>(<span class="at">suffix =</span> <span class="st">' million'</span>, <span class="at">scale =</span> <span class="fl">0.000001</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>)) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12000</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.01</span>)) <span class="sc">+</span></span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">'No. read-pairs'</span>, <span class="at">y =</span> <span class="st">'Time (in seconds)'</span>) <span class="sc">+</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    ggpmisc<span class="sc">::</span><span class="fu">stat_poly_eq</span>(ggpmisc<span class="sc">::</span><span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"R2"</span>)), <span class="at">formula =</span> x<span class="sc">~</span>y, <span class="at">method =</span> <span class="st">'lm'</span>) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    ggpubr<span class="sc">::</span><span class="fu">stat_cor</span>(<span class="at">label.y =</span> <span class="dv">11000</span>, <span class="at">p.digits =</span> <span class="dv">0</span>, <span class="at">method =</span> <span class="st">'pearson'</span>, <span class="at">alternative =</span> <span class="st">'two.sided'</span>) <span class="sc">+</span></span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    theme_job</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-benchmark-bigO" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-cap-location="margin" data-fig-align="center">
+<div id="fig-benchmark-bigO" class="quarto-figure quarto-figure-center quarto-float anchored page-columns page-full" data-fig-align="center" data-cap-location="margin">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-benchmark-bigO-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="1.benchmarking_files/figure-html/fig-benchmark-bigO-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="4320">
@@ -440,89 +440,88 @@ Figure&nbsp;3: De-multiplexing speed per 1M reads.
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       Europe/Berlin
- date     2024-02-29
- pandoc   3.1.12.1 @ /opt/homebrew/bin/ (via rmarkdown)
+ date     2024-03-11
+ pandoc   3.1.12.2 @ /opt/homebrew/bin/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
- package      * version    date (UTC) lib source
- bit            4.0.5      2022-11-15 [1] CRAN (R 4.3.0)
- bit64          4.0.5      2020-08-30 [1] CRAN (R 4.3.0)
- cli            3.6.2      2023-12-11 [1] CRAN (R 4.3.1)
- codetools      0.2-19     2023-02-01 [1] CRAN (R 4.3.2)
- colorspace     2.1-0      2023-01-23 [1] CRAN (R 4.3.0)
- commonmark     1.9.1      2024-01-30 [1] CRAN (R 4.3.1)
- confintr       1.0.2      2023-06-04 [1] CRAN (R 4.3.0)
- crayon         1.5.2      2022-09-29 [1] CRAN (R 4.3.0)
- digest         0.6.34     2024-01-11 [1] CRAN (R 4.3.1)
- dplyr        * 1.1.4      2023-11-17 [1] CRAN (R 4.3.1)
- evaluate       0.23       2023-11-01 [1] CRAN (R 4.3.1)
- fansi          1.0.6      2023-12-08 [1] CRAN (R 4.3.1)
- farver         2.1.1      2022-07-06 [1] CRAN (R 4.3.0)
- fastmap        1.1.1      2023-02-24 [1] CRAN (R 4.3.0)
- future         1.33.1     2023-12-22 [1] CRAN (R 4.3.1)
- future.apply   1.11.1     2023-12-21 [1] CRAN (R 4.3.1)
- generics       0.1.3      2022-07-05 [1] CRAN (R 4.3.0)
- ggplot2        3.4.4      2023-10-12 [1] CRAN (R 4.3.1)
- ggpmisc        0.5.5      2023-11-15 [1] CRAN (R 4.3.1)
- ggpp           0.5.6      2024-01-09 [1] CRAN (R 4.3.1)
- ggtext         0.1.2      2022-09-16 [1] CRAN (R 4.3.0)
- globals        0.16.2     2022-11-21 [1] CRAN (R 4.3.0)
- glue           1.7.0      2024-01-09 [1] CRAN (R 4.3.1)
- gridtext       0.1.5      2022-09-16 [1] CRAN (R 4.3.0)
- gtable         0.3.4      2023-08-21 [1] CRAN (R 4.3.0)
- highr          0.10       2022-12-22 [1] CRAN (R 4.3.0)
- hms            1.1.3      2023-03-21 [1] CRAN (R 4.3.0)
- htmltools      0.5.7      2023-11-03 [1] CRAN (R 4.3.1)
- htmlwidgets    1.6.4      2023-12-06 [1] CRAN (R 4.3.1)
- hues           0.2.0      2019-12-01 [1] CRAN (R 4.3.0)
- jsonlite       1.8.8      2023-12-04 [1] CRAN (R 4.3.1)
- kableExtra     1.4.0      2024-01-24 [1] CRAN (R 4.3.1)
- knitr          1.45       2023-10-30 [1] CRAN (R 4.3.1)
- labeling       0.4.3      2023-08-29 [1] CRAN (R 4.3.0)
- lattice        0.22-5     2023-10-24 [1] CRAN (R 4.3.1)
- lifecycle      1.0.4      2023-11-07 [1] CRAN (R 4.3.1)
- listenv        0.9.1      2024-01-29 [1] CRAN (R 4.3.1)
- lubridate      1.9.3      2023-09-27 [1] CRAN (R 4.3.1)
- magrittr       2.0.3      2022-03-30 [1] CRAN (R 4.3.0)
- markdown       1.12       2023-12-06 [1] CRAN (R 4.3.1)
- MASS           7.3-60.0.1 2024-01-13 [1] CRAN (R 4.3.1)
- Matrix         1.6-5      2024-01-11 [1] CRAN (R 4.3.1)
- MatrixModels   0.5-3      2023-11-06 [1] CRAN (R 4.3.1)
- munsell        0.5.0      2018-06-12 [1] CRAN (R 4.3.0)
- openxlsx       4.2.5.2    2023-02-06 [1] CRAN (R 4.3.0)
- parallelly     1.37.0     2024-02-14 [1] CRAN (R 4.3.1)
- patchwork    * 1.2.0      2024-01-08 [1] CRAN (R 4.3.1)
- pillar         1.9.0      2023-03-22 [1] CRAN (R 4.3.0)
- pkgconfig      2.0.3      2019-09-22 [1] CRAN (R 4.3.0)
- polynom        1.4-1      2022-04-11 [1] CRAN (R 4.3.0)
- quantreg       5.97       2023-08-19 [1] CRAN (R 4.3.0)
- R6             2.5.1      2021-08-19 [1] CRAN (R 4.3.0)
- Rcpp           1.0.12     2024-01-09 [1] CRAN (R 4.3.1)
- readr          2.1.5      2024-01-10 [1] CRAN (R 4.3.1)
- rlang          1.1.3      2024-01-10 [1] CRAN (R 4.3.1)
- rmarkdown      2.25       2023-09-18 [1] CRAN (R 4.3.1)
- rstudioapi     0.15.0     2023-07-07 [1] CRAN (R 4.3.0)
- scales         1.3.0      2023-11-28 [1] CRAN (R 4.3.1)
- sessioninfo    1.2.2      2021-12-06 [1] CRAN (R 4.3.0)
- SparseM        1.81       2021-02-18 [1] CRAN (R 4.3.0)
- stringi        1.8.3      2023-12-11 [1] CRAN (R 4.3.1)
- stringr        1.5.1      2023-11-14 [1] CRAN (R 4.3.1)
- survival       3.5-8      2024-02-14 [1] CRAN (R 4.3.1)
- svglite        2.1.3      2023-12-08 [1] CRAN (R 4.3.1)
- systemfonts    1.0.5      2023-10-09 [1] CRAN (R 4.3.1)
- tibble         3.2.1      2023-03-20 [1] CRAN (R 4.3.0)
- tidyselect     1.2.0      2022-10-10 [1] CRAN (R 4.3.0)
- timechange     0.3.0      2024-01-18 [1] CRAN (R 4.3.1)
- tzdb           0.4.0      2023-05-12 [1] CRAN (R 4.3.0)
- utf8           1.2.4      2023-10-22 [1] CRAN (R 4.3.1)
- vctrs          0.6.5      2023-12-01 [1] CRAN (R 4.3.1)
- viridisLite    0.4.2      2023-05-02 [1] CRAN (R 4.3.0)
- vroom          1.6.5      2023-12-05 [1] CRAN (R 4.3.1)
- withr          3.0.0      2024-01-16 [1] CRAN (R 4.3.1)
- xfun           0.42       2024-02-08 [1] CRAN (R 4.3.1)
- xml2           1.3.6      2023-12-04 [1] CRAN (R 4.3.1)
- yaml           2.3.8      2023-12-11 [1] CRAN (R 4.3.1)
- zip            2.3.1      2024-01-27 [1] CRAN (R 4.3.1)
+ package      * version date (UTC) lib source
+ abind          1.4-5   2016-07-21 [1] CRAN (R 4.3.0)
+ backports      1.4.1   2021-12-13 [1] CRAN (R 4.3.0)
+ bit            4.0.5   2022-11-15 [1] CRAN (R 4.3.0)
+ bit64          4.0.5   2020-08-30 [1] CRAN (R 4.3.0)
+ broom          1.0.5   2023-06-09 [1] CRAN (R 4.3.0)
+ car            3.1-2   2023-03-30 [1] CRAN (R 4.3.0)
+ carData        3.0-5   2022-01-06 [1] CRAN (R 4.3.0)
+ cli            3.6.2   2023-12-11 [1] CRAN (R 4.3.1)
+ codetools      0.2-19  2023-02-01 [1] CRAN (R 4.3.2)
+ colorspace     2.1-0   2023-01-23 [1] CRAN (R 4.3.0)
+ commonmark     1.9.1   2024-01-30 [1] CRAN (R 4.3.1)
+ crayon         1.5.2   2022-09-29 [1] CRAN (R 4.3.0)
+ digest         0.6.34  2024-01-11 [1] CRAN (R 4.3.1)
+ dplyr        * 1.1.4   2023-11-17 [1] CRAN (R 4.3.1)
+ evaluate       0.23    2023-11-01 [1] CRAN (R 4.3.1)
+ fansi          1.0.6   2023-12-08 [1] CRAN (R 4.3.1)
+ farver         2.1.1   2022-07-06 [1] CRAN (R 4.3.0)
+ fastmap        1.1.1   2023-02-24 [1] CRAN (R 4.3.0)
+ future         1.33.1  2023-12-22 [1] CRAN (R 4.3.1)
+ future.apply   1.11.1  2023-12-21 [1] CRAN (R 4.3.1)
+ generics       0.1.3   2022-07-05 [1] CRAN (R 4.3.0)
+ ggplot2        3.5.0   2024-02-23 [1] CRAN (R 4.3.1)
+ ggpubr         0.6.0   2023-02-10 [1] CRAN (R 4.3.0)
+ ggsignif       0.6.4   2022-10-13 [1] CRAN (R 4.3.0)
+ ggtext         0.1.2   2022-09-16 [1] CRAN (R 4.3.0)
+ globals        0.16.2  2022-11-21 [1] CRAN (R 4.3.0)
+ glue           1.7.0   2024-01-09 [1] CRAN (R 4.3.1)
+ gridtext       0.1.5   2022-09-16 [1] CRAN (R 4.3.0)
+ gtable         0.3.4   2023-08-21 [1] CRAN (R 4.3.0)
+ highr          0.10    2022-12-22 [1] CRAN (R 4.3.0)
+ hms            1.1.3   2023-03-21 [1] CRAN (R 4.3.0)
+ htmltools      0.5.7   2023-11-03 [1] CRAN (R 4.3.1)
+ htmlwidgets    1.6.4   2023-12-06 [1] CRAN (R 4.3.1)
+ hues           0.2.0   2019-12-01 [1] CRAN (R 4.3.0)
+ jsonlite       1.8.8   2023-12-04 [1] CRAN (R 4.3.1)
+ kableExtra     1.4.0   2024-01-24 [1] CRAN (R 4.3.1)
+ knitr          1.45    2023-10-30 [1] CRAN (R 4.3.1)
+ labeling       0.4.3   2023-08-29 [1] CRAN (R 4.3.0)
+ lifecycle      1.0.4   2023-11-07 [1] CRAN (R 4.3.1)
+ listenv        0.9.1   2024-01-29 [1] CRAN (R 4.3.1)
+ lubridate      1.9.3   2023-09-27 [1] CRAN (R 4.3.1)
+ magrittr       2.0.3   2022-03-30 [1] CRAN (R 4.3.0)
+ markdown       1.12    2023-12-06 [1] CRAN (R 4.3.1)
+ munsell        0.5.0   2018-06-12 [1] CRAN (R 4.3.0)
+ openxlsx       4.2.5.2 2023-02-06 [1] CRAN (R 4.3.0)
+ parallelly     1.37.1  2024-02-29 [1] CRAN (R 4.3.1)
+ patchwork    * 1.2.0   2024-01-08 [1] CRAN (R 4.3.1)
+ pillar         1.9.0   2023-03-22 [1] CRAN (R 4.3.0)
+ pkgconfig      2.0.3   2019-09-22 [1] CRAN (R 4.3.0)
+ purrr          1.0.2   2023-08-10 [1] CRAN (R 4.3.0)
+ R6             2.5.1   2021-08-19 [1] CRAN (R 4.3.0)
+ Rcpp           1.0.12  2024-01-09 [1] CRAN (R 4.3.1)
+ readr          2.1.5   2024-01-10 [1] CRAN (R 4.3.1)
+ rlang          1.1.3   2024-01-10 [1] CRAN (R 4.3.1)
+ rmarkdown      2.26    2024-03-05 [1] CRAN (R 4.3.1)
+ rstatix        0.7.2   2023-02-01 [1] CRAN (R 4.3.0)
+ rstudioapi     0.15.0  2023-07-07 [1] CRAN (R 4.3.0)
+ scales         1.3.0   2023-11-28 [1] CRAN (R 4.3.1)
+ sessioninfo    1.2.2   2021-12-06 [1] CRAN (R 4.3.0)
+ stringi        1.8.3   2023-12-11 [1] CRAN (R 4.3.1)
+ stringr        1.5.1   2023-11-14 [1] CRAN (R 4.3.1)
+ svglite        2.1.3   2023-12-08 [1] CRAN (R 4.3.1)
+ systemfonts    1.0.5   2023-10-09 [1] CRAN (R 4.3.1)
+ tibble         3.2.1   2023-03-20 [1] CRAN (R 4.3.0)
+ tidyr          1.3.1   2024-01-24 [1] CRAN (R 4.3.1)
+ tidyselect     1.2.0   2022-10-10 [1] CRAN (R 4.3.0)
+ timechange     0.3.0   2024-01-18 [1] CRAN (R 4.3.1)
+ tzdb           0.4.0   2023-05-12 [1] CRAN (R 4.3.0)
+ utf8           1.2.4   2023-10-22 [1] CRAN (R 4.3.1)
+ vctrs          0.6.5   2023-12-01 [1] CRAN (R 4.3.1)
+ viridisLite    0.4.2   2023-05-02 [1] CRAN (R 4.3.0)
+ vroom          1.6.5   2023-12-05 [1] CRAN (R 4.3.1)
+ withr          3.0.0   2024-01-16 [1] CRAN (R 4.3.1)
+ xfun           0.42    2024-02-08 [1] CRAN (R 4.3.1)
+ xml2           1.3.6   2023-12-04 [1] CRAN (R 4.3.1)
+ yaml           2.3.8   2023-12-11 [1] CRAN (R 4.3.1)
+ zip            2.3.1   2024-01-27 [1] CRAN (R 4.3.1)
 
  [1] /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library
 
